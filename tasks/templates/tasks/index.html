@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список дел</title>
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Мой список дел</h1>
+        </header>
+
+        <section class="task-form">
+
+            <form action="{% url 'add_task' %}" method="post">
+
+
+                {% csrf_token %}
+                <input type="text" name="task" placeholder="Добавить задачу..." required>
+                <p>
+
+                </p>
+
+                <button type="submit">Добавить</button>
+            </form>
+        </section>
+
+        <section class="task-list">
+            <h2>Мои задачи</h2>
+            <ul>
+                {% for task in tasks %}
+                <li class="{% if task.completed %} completed {% endif %}">
+                    <span>{{ task.name }}</span>
+                    <form action="{% url 'toggle_task' task.id %}" method="post" class="toggle-form">
+                        {% csrf_token %}
+                        <button type="submit">
+                            {% if task.completed %}✔ Выполнено{% else %}✖ Выполнить{% endif %}
+
+                        </button>
+
+                    </form>
+
+                    <form action="{% url 'delete_task' task.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Удалить</button>
+                    </form>
+                </li>
+                {% empty %}
+                <p>Пока задач нет.</p>
+                {% endfor %}
+
+            </ul>
+
+        </section>
+    </div>
+</body>
+</html>
