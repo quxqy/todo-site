@@ -12,9 +12,9 @@ body {
 }
 
 /* Общий контейнер */
-.container, .form-container {
+.container {
     width: 90%;
-    max-width: 400px;
+    max-width: 600px;
     margin-top: 40px;
     padding: 20px;
     background: #ffffff;
@@ -24,62 +24,105 @@ body {
 }
 
 /* Заголовки */
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
 header h1, h2 {
-    font-size: 1.8em;
+    font-size: 2em;
     color: #333;
-    margin: 0;
+    margin: 0 0 20px;
 }
 
 /* Формы */
 form {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
-form input[type="text"], form input[type="password"] {
-    width: 100%;
+form input[type="text"] {
+    width: 75%;
     padding: 10px;
-    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1em;
 }
 
 form button {
-    width: 100%;
-    padding: 10px;
+    padding: 10px 20px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 form button:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
 }
 
-a {
-    color: #007BFF;
-    text-decoration: none;
+/* Стили для списка задач */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-/* Стили для сообщений */
-.message {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+li {
+    background: #f1f1f1;
+    padding: 15px;
+    margin-bottom: 10px;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Состояние выполненной задачи */
+li.completed {
+    background: #d4edda; /* Зеленый фон */
+    color: #155724; /* Зеленый текст */
+    text-decoration: line-through; /* Зачеркнутый текст */
+}
+
+/* Кнопки управления задачами */
+li form button {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+li form button:hover {
+    background-color: #5a6268;
+    transform: scale(1.1);
+}
+
+/* Кнопка удаления задачи */
+li form button[type="submit"] {
+    background-color: #dc3545; /* Красный */
+}
+
+li form button[type="submit"]:hover {
+    background-color: #c82333; /* Темно-красный */
+}
+
+/* Кнопка выхода */
+.logout-btn {
+    background: #f44336;
+    color: white;
+    padding: 5px 15px;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #d32f2f;
 }

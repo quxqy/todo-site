@@ -1,0 +1,68 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Личный кабинет</h1>
+            <h3>Добро пожаловать, {{ data.name }}</h3>
+
+            <h3>{{ data }}</h3>
+
+        </header>
+
+        <!-- Смена пароля -->
+        <section>
+            <form action="/change-password" method="post">
+                <input type="text" name="new-password" placeholder="Новый пароль">
+                <button type="submit">Сменить пароль</button>
+            </form>
+        </section>
+
+        <!-- Статистика пользователя -->
+        <section>
+            <h2>Статистика</h2>
+            <p>Количество задач: <strong>{{ count }}</strong></p>
+            <p>Процент выполнения: <strong>{{ countCompleted }}</strong></p>
+            <canvas id="userStatsChart" width="400" height="200" style="margin-top: 20px;"></canvas>
+        </section>
+
+        <!-- Кнопка выхода и возврата -->
+        <section style="margin-top: 20px;">
+            <!-- Кнопка возврата -->
+            <form action="/index" method="get" style="display: inline;">
+                <button type="submit" class="logout-btn" style="background: #007BFF;">Назад</button>
+            </form>
+
+    <!-- Скрипт для графика -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('userStatsChart').getContext('2d');
+        const userStatsChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Завершенные задачи', 'Незавершенные задачи'],
+                datasets: [{
+                     data: [{{ countCompleted }}, {{ count }}],
+                    backgroundColor: ['#28a745', '#f1f1f1']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
