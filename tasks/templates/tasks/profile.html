@@ -20,11 +20,22 @@
 
         <!-- Смена пароля -->
         <section>
-            <form action="/change-password" method="post">
-                <input type="text" name="new-password" placeholder="Новый пароль">
+            <form action="{% url 'change_password' user_id=request.user.id %}" method="post">
+                {% csrf_token %}
+                <input type="password" name="new-password" placeholder="Новый пароль" required>
+
                 <button type="submit">Сменить пароль</button>
             </form>
         </section>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+
 
         <!-- Статистика пользователя -->
         <section>

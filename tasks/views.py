@@ -1,14 +1,15 @@
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponse
-
+from django.contrib.auth.hashers import make_password
 from tasks.models import Task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from .forms import SignUpForm
-
-
+from django.contrib import messages
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 @login_required
 def index(request):
@@ -51,6 +52,30 @@ def profile(request, user_id):
     else:
         return HttpResponse('ERROR')
 
+@login_required
+def change_password(request, user_id):
+    # Получаем текущего пользователя
+    user = request.user
+
+    # Обрабатываем только POST-запросы
+    if request.method == 'POST':
+        new_password = request.POST.get('new-password')
+
+        # Проверяем, что пароль введен
+        if not new_password:
+            messages.error(request, "Пароль не может быть пустым.")
+            return redirect('profile',user_id=user.id)  # Возврат на страницу профиля
+
+        # Обновляем пароль
+        user.password = make_password(new_password)  # Хэшируем пароль
+        user.save()
+        update_session_auth_hash(request, user)
+        messages.success(request, "Пароль успешно изменён.")
+        return redirect('profile',user_id=user.id)  # Возврат на страницу профиля
+
+    # Если запрос не POST, просто перенаправляем на профиль
+    return redirect('profile',user_id=user.id)
+
 def delete_task(request, task_id):
     deletetask = (Task.objects.get(pk=task_id))
     deletetask.delete()
@@ -66,6 +91,9 @@ def register(request):
     else:
         form = SignUpForm()
     return render(request, 'tasks/register.html', {'form': form})
+
+
+
 
 
 def login(request):

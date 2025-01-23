@@ -16,6 +16,7 @@ urlpatterns = [
     path('',login, name='login'),
     path('logout/', authViews.LogoutView.as_view(next_page='login'), name='logout'),
     path('profile/<int:user_id>/',profile,name='profile'),
+    path('change_password/<int:user_id>/',change_password,name='change_password'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
