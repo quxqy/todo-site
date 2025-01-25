@@ -24,6 +24,7 @@ def index(request):
 def add_task(request):
 
     addtask = Task(name=(request.POST.get('task')), completed=False,user=request.user)
+
     addtask.save()
 
     return redirect('index')
@@ -54,26 +55,17 @@ def profile(request, user_id):
 
 @login_required
 def change_password(request, user_id):
-    # Получаем текущего пользователя
     user = request.user
-
-    # Обрабатываем только POST-запросы
     if request.method == 'POST':
         new_password = request.POST.get('new-password')
-
-        # Проверяем, что пароль введен
         if not new_password:
             messages.error(request, "Пароль не может быть пустым.")
-            return redirect('profile',user_id=user.id)  # Возврат на страницу профиля
-
-        # Обновляем пароль
-        user.password = make_password(new_password)  # Хэшируем пароль
+            return redirect('profile',user_id=user.id)
+        user.password = make_password(new_password)
         user.save()
         update_session_auth_hash(request, user)
         messages.success(request, "Пароль успешно изменён.")
-        return redirect('profile',user_id=user.id)  # Возврат на страницу профиля
-
-    # Если запрос не POST, просто перенаправляем на профиль
+        return redirect('profile',user_id=user.id)
     return redirect('profile',user_id=user.id)
 
 def delete_task(request, task_id):
@@ -83,18 +75,26 @@ def delete_task(request, task_id):
 
 def register(request):
     if request.method == 'POST':
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        existing_usernames = User.objects.values_list('username', flat=True)
+        if username in existing_usernames:
+            return render(request, 'tasks/register.html', {'error': 'Имя пользователя уже занято'})
+
         form = SignUpForm(request.POST)
+
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
             return redirect('index')
+        elif password1 != password2:
+            return render(request, 'tasks/register.html', {'error': 'Пароли должны совпадать'})
     else:
         form = SignUpForm()
+
     return render(request, 'tasks/register.html', {'form': form})
-
-
-
-
 
 def login(request):
     if request.method == 'POST':

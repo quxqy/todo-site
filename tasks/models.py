@@ -7,7 +7,7 @@ from django.db import models
 
 # Create your models here.
 class Task(models.Model):
-    name = models.CharField(unique=True,null=False, max_length=128)
+    name = models.CharField(null=False, max_length=128)
     completed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
