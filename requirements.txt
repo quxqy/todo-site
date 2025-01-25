@@ -1,0 +1,9 @@
+Django==5.1.4
+asgiref==3.8.1
+pillow==11.0.0
+pip==23.0.1
+psycopg2==2.9.10
+psycopg2-binary==2.9.10
+python-decouple==3.8
+setuptools==66.1.1
+sqlparse==0.5.3
